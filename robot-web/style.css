@@ -1,11 +1,69 @@
+/* ============== */
+/* Global Body Reset and Overflow Handling */
+/* ============== */
 body {
     margin: 0;
     padding: 0;
     overflow: hidden;
 }
 
+/* ============== */
+/* 3D Scene Canvas Container */
+/* ============== */
 #scene {
     display: block;
     width: 100vw;
-    height: 100vh;
+    height: 100%;
+}
+
+/* ============== */
+/* Main Layout Container */
+/* ============== */
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ============== */
+/* Frame Wrapper Container */
+/* ============== */
+.frame-container {
+    display: flex;
+}
+
+/* ============== */
+/* Video Frame Display Area */
+/* ============== */
+.frame {
+    width: 80vw;
+    height: 45vh;
+}
+
+/* ============== */
+/* Info Panel Styling */
+/* ============== */
+.frame-info {
+    width: 20vw;
+    height: 45vh;
+    background-color: rgb(25, 140, 235);
+    display: flex;
+    flex-direction: column;
+    padding-left: 12px;
+    justify-content: center;
+}
+
+/* ============== */
+/* Primary Heading Text Style */
+/* ============== */
+.sp-1 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+/* ============== */
+/* Secondary Text Spacing Utility */
+/* ============== */
+.sp-2 {
+    margin-left: 4px;
 }

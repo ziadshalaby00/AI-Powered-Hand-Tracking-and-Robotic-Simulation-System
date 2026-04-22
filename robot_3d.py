@@ -1,66 +1,82 @@
-import websocket
-import json
-import time
+# =============================================================================
+# =============================================================================
+# This file is responsible for connecting to the socket.io 
+# that I previously created so that I can send data to the web.
+# =============================================================================
+# =============================================================================
+
+import socketio
 import threading
+import time
+from queue import Queue
 
-# =========================
-# Shared latest data (no queue lag)
-# =========================
-latest_data = None
-lock = threading.Lock()
+# ==============
+# Socket.IO Client Initialization and Data Queue
+# ==============
+sio = socketio.Client(reconnection=True, reconnection_attempts=999999)
+data_queue = Queue(maxsize=1)
 
-# =========================
-# WebSocket Worker (background thread)
-# =========================
-def ws_worker():
-    try:
-        ws = websocket.create_connection("ws://localhost:8765")
-        print("WebSocket connected ✔️")
 
-        global latest_data
+# ==============
+# Socket.IO Connection Event Handlers
+# ==============
+@sio.event
+def connect():
+    print("Socket.IO connected ✔️")
 
-        while True:
-            data_to_send = None
 
-            # Get latest value safely
-            with lock:
-                data_to_send = latest_data
-                latest_data = None
+@sio.event
+def disconnect():
+    print("Socket.IO disconnected ❌")
 
-            if data_to_send is not None:
+
+# ==============
+# Background Socket Worker Thread
+# ==============
+def socket_worker():
+    while True:
+        try:
+            if not sio.connected:
+                sio.connect("http://localhost:8765")
+
+            if not data_queue.empty():
+                data = data_queue.get()
+
                 try:
-                    ws.send(json.dumps(data_to_send))
+                    sio.emit("hand_data", data)
                 except Exception as e:
-                    print("WebSocket send error:", e)
+                    print("emit error:", e)
 
-            time.sleep(0.001)  # small sleep to prevent CPU 100%
+            time.sleep(0.01)
 
-    except Exception as e:
-        print("WebSocket connection error:", e)
-
-
-# =========================
-# Start WebSocket Thread
-# =========================
-threading.Thread(target=ws_worker, daemon=True).start()
+        except Exception as e:
+            print("socket error:", e)
+            time.sleep(2)
 
 
-# =========================
-# Send function (call from MediaPipe loop)
-# =========================
-def send_hand_data(hand_x, hand_y, last_time, fps=30):
-    global latest_data
+# ==============
+# Start Socket Worker as Daemon Thread
+# ==============
+threading.Thread(target=socket_worker, daemon=True).start()
 
+
+# ==============
+# Rate-Limited Data Sending Utility
+# ==============
+def send_data(hand_data, last_time, fps=15):
     current_time = time.time()
 
-    # FPS control
     if current_time - last_time < 1 / fps:
         return last_time
 
-    with lock:
-        latest_data = {
-            "hand_x": float(hand_x),
-            "hand_y": float(hand_y)
-        }
+    last_time = current_time
+
+    if data_queue.full():
+        try:
+            data_queue.get_nowait()
+        except:
+            pass
+
+    data_queue.put(hand_data)
 
     return current_time

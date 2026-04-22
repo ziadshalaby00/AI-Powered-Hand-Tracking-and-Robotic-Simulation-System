@@ -1,21 +1,60 @@
 <!DOCTYPE html>
 <html>
+
+<!-- ============== -->
+<!-- Document Head: Metadata and External Resources -->
+<!-- ============== -->
 <head>
   <title>Robot Control</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </head>
+
 <body>
 
-  <canvas id="scene"></canvas>
+  <!-- ============== -->
+  <!-- Main Application Container -->
+  <!-- ============== -->
+  <div id="container" class="container">
+    
+    <!-- ============== -->
+    <!-- Three.js 3D Scene Canvas -->
+    <!-- ============== -->
+    <canvas id="scene"></canvas>
+    
+    <!-- ============== -->
+    <!-- Frame Display Container (Video + Info Panel) -->
+    <!-- ============== -->
+    <div id="frame-container" class="frame-container">
+      
+      <!-- ============== -->
+      <!-- Dynamic Info Panel Placeholder -->
+      <!-- ============== -->
+      <div id="frame-info" class="frame-info">
+      </div>
+      
+      <!-- ============== -->
+      <!-- Live Video Stream from FastAPI Server -->
+      <!-- ============== -->
+      <img id="frame" class="frame" src="http://localhost:5000/video" alt="">
+    </div>
+  </div>
 
-    <script type="importmap">
-    {
-        "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-        }
-    }
-    </script>
+  <!-- ============== -->
+  <!-- Three.js Module Import Map Configuration -->
+  <!-- ============== -->
+  <script type="importmap">
+  {
+      "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+  }
+  </script>
+  
+  <!-- ============== -->
+  <!-- Main Application Logic Module -->
+  <!-- ============== -->
   <script type="module" src="main.js"></script>
 
 </body>
