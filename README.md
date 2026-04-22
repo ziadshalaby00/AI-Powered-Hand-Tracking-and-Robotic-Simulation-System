@@ -1,5 +1,15 @@
 # AI-Powered Hand Tracking and Robotic Simulation System
 
+## Basic files
+- socket_io_server.py
+- video_server.py
+- robot_3d.py
+- core.py
+- robot-web/
+- - index.html 
+- - style.css 
+- - main.js 
+
 
 ## Project Setup & Run Guide
 
