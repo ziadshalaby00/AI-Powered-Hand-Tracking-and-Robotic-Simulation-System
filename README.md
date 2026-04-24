@@ -43,7 +43,7 @@ Navigate to the project folder and open:
 robot-web/index.html
 ```
 
-Open this file directly in your browser.
+Open this file with live server in vs code or any server like node js.
 
 ---
 
