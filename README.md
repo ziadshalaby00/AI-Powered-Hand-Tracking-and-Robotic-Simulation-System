@@ -1,4 +1,4 @@
-# AI-Powered Hand Tracking and Robotic Simulation System
+# Vision-Based Human-Robot Interaction System Using Hand Gestures
 
 ## Basic files
 - socket_io_server.py
